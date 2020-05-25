@@ -24,5 +24,16 @@ namespace RestSample.Data.Models
         public string Name { get; set; }
 
         public int Price { get; set; }
+
+        public int Weight { get; set; }
+
+        public ICollection<IngredientDb> Ingredients { get; set; }
+    }
+
+    public class IngredientDb
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
     }
 }

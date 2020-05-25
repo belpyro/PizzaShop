@@ -77,6 +77,7 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="LogicDIModule.cs" />
+    <Compile Include="Models\IngredientDto.cs" />
     <Compile Include="Models\PizzaDto.cs" />
     <Compile Include="Profiles\PizzaProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

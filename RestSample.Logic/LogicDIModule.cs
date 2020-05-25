@@ -15,7 +15,7 @@ namespace RestSample.Logic
     {
         public override void Load()
         {
-            Mapper.Initialize(cfg => cfg.AddProfile<PizzaProfile>());
+            Mapper.Initialize(cfg => cfg.AddProfiles(typeof(PizzaProfile)));
             var mapper = Mapper.Configuration.CreateMapper();
 
             this.Bind<IMapper>().ToConstant(mapper);

@@ -5,6 +5,7 @@ using RestSample.Logic.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,12 +25,20 @@ namespace RestSample.Logic.Services
 
         public IEnumerable<PizzaDto> GetAll()
         {
-            return _context.Pizzas.ProjectToArray<PizzaDto>(_mapper.ConfigurationProvider);
+            //return _context.Pizzas.ProjectToArray<PizzaDto>(_mapper.ConfigurationProvider);
+            var models = _context.Pizzas.AsNoTracking().Include("Ingredients").ToArray();
+            return _mapper.Map<IEnumerable<PizzaDto>>(models);
         }
 
         public PizzaDto GetById(int id)
         {
-            return _context.Pizzas.Where(x => x.Id == id).ProjectToSingleOrDefault<PizzaDto>(_mapper.ConfigurationProvider);
+            var dbModel = new PizzaDb { Id = id };
+            _context.Pizzas.Attach(dbModel);
+            var entry = _context.Entry(dbModel);
+
+            entry.Collection(x => x.Ingredients).Load();
+            return _mapper.Map<PizzaDto>(entry.Entity);
+            //return _context.Pizzas.Where(x => x.Id == id).ProjectToSingleOrDefault<PizzaDto>(_mapper.ConfigurationProvider);
         }
 
         public PizzaDto Add(PizzaDto model)
@@ -46,9 +55,16 @@ namespace RestSample.Logic.Services
 
         public void Update(PizzaDto model)
         {
-            var dbModel = _context.Pizzas.Find(model.Id); //SELECT
-            dbModel.Name = model.Name;
-            dbModel.Price = model.Price;
+            //var dbModel = _context.Pizzas.Find(model.Id); //SELECT
+            //dbModel.Name = model.Name;
+            //dbModel.Price = model.Price;
+            var dbModel = _mapper.Map<PizzaDb>(model);
+            _context.Pizzas.Attach(dbModel);
+            var entry = _context.Entry(dbModel);
+            // global state
+            //entry.State = System.Data.Entity.EntityState.Modified;
+            entry.Property(x => x.Name).IsModified = true;
+            entry.Property(x => x.Price).IsModified = true;
 
             _context.SaveChanges(); //UPDATE
         }

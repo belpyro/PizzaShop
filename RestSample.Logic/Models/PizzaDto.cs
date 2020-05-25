@@ -1,4 +1,6 @@
-﻿namespace RestSample.Logic.Models
+﻿using System.Collections.Generic;
+
+namespace RestSample.Logic.Models
 {
     public class PizzaDto //DTO Data Transfer Object
     {
@@ -7,5 +9,7 @@
         public string Name { get; set; }
 
         public int Price { get; set; }
+
+        public IEnumerable<IngredientDto> Ingredients { get; set; }
     }
 }

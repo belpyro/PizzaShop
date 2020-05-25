@@ -19,4 +19,13 @@ namespace RestSample.Logic.Profiles
         }
         // Mapster
     }
+
+    class IngredientProfile : Profile
+    {
+        public IngredientProfile()
+        {
+            CreateMap<IngredientDb, IngredientDto>()
+                .ReverseMap();
+        }
+    }
 }
