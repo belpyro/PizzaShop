@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using FluentValidation.WebApi;
+using System.Web.Http;
 
 namespace RestSampleNew
 {
@@ -16,6 +17,11 @@ namespace RestSampleNew
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            FluentValidationModelValidatorProvider.Configure(config, opt =>
+            {
+                opt.ValidatorFactory = new CustomValidatorFactory(config.DependencyResolver);
+            });
         }
     }
 }

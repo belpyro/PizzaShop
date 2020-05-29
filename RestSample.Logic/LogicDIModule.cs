@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using Ninject.Modules;
 using RestSample.Data.Contexts;
+using RestSample.Logic.Models;
 using RestSample.Logic.Profiles;
 using RestSample.Logic.Services;
+using RestSample.Logic.Validators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +25,7 @@ namespace RestSample.Logic
 
             this.Bind<PizzaShopContext>().ToSelf();
             this.Bind<IPizzaService>().To<PizzaService>();
-            // .....
+            this.Bind<IValidator<PizzaDto>>().To<PizzaDtoValidator>();            // .....
         }
     }
 }

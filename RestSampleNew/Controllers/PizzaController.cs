@@ -1,10 +1,8 @@
-﻿using RestSample.Logic.Models;
+﻿using FluentValidation;
+using FluentValidation.WebApi;
+using RestSample.Logic.Models;
 using RestSample.Logic.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 
 namespace RestSampleNew.Controllers
@@ -46,15 +44,22 @@ namespace RestSampleNew.Controllers
         //INSERT
         [HttpPost]
         [Route("")]
-        public IHttpActionResult Add([FromBody]PizzaDto model)
+        public IHttpActionResult Add([CustomizeValidator(RuleSet = "PreValidation")][FromBody]PizzaDto model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            model = _pizzaService.Add(model);
-            return Created($"/pizzas/{model.Id}", model);
+            try
+            {
+                model = _pizzaService.Add(model);
+                return Created($"/pizzas/{model.Id}", model);
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         //UPDATE

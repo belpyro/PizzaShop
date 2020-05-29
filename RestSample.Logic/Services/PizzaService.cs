@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using RestSample.Data.Contexts;
 using RestSample.Data.Models;
 using RestSample.Logic.Models;
@@ -16,11 +17,13 @@ namespace RestSample.Logic.Services
         private static List<PizzaDto> _pizzas = PizzaFaker.Generate();
         private readonly PizzaShopContext _context;
         private readonly IMapper _mapper;
+        private readonly IValidator<PizzaDto> _validator;
 
-        public PizzaService(PizzaShopContext context, IMapper mapper)
+        public PizzaService(PizzaShopContext context, IMapper mapper, IValidator<PizzaDto> validator)
         {
             this._context = context;
             this._mapper = mapper;
+            this._validator = validator;
         }
 
         public IEnumerable<PizzaDto> GetAll()
@@ -44,6 +47,8 @@ namespace RestSample.Logic.Services
         public PizzaDto Add(PizzaDto model)
         {
             // validation
+            _validator.ValidateAndThrow(model, "PostValidation");
+
             var dbModel = _mapper.Map<PizzaDb>(model);
 
             _context.Pizzas.Add(dbModel);
