@@ -48,6 +48,11 @@ namespace RestSampleNew.Controllers
         [Route("")]
         public IHttpActionResult Add([FromBody]PizzaDto model)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             model = _pizzaService.Add(model);
             return Created($"/pizzas/{model.Id}", model);
         }
@@ -63,7 +68,7 @@ namespace RestSampleNew.Controllers
 
         //DELETE
         [HttpDelete]
-        [Route("{id}")]
+        [Route("{id:int:min(1)}")]
         public IHttpActionResult Delete(int id)
         {
             // delete

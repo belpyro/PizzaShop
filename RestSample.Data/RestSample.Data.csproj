@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contexts\PizzaDbConfiguration.cs" />
     <Compile Include="Contexts\PizzaShopContext.cs" />
     <Compile Include="Migrations\202005251703061_InitialCreate.cs" />
     <Compile Include="Migrations\202005251703061_InitialCreate.designer.cs">

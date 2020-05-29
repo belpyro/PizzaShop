@@ -25,13 +25,7 @@ namespace RestSample.Data.Contexts
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            var entity = modelBuilder.Entity<PizzaDb>();
-
-            entity.HasKey(x => x.Id).ToTable("ShopPizzas");
-            entity.Property(x => x.Name).IsRequired().HasMaxLength(150).IsUnicode().IsVariableLength();
-            entity.Property(x => x.Price).IsRequired();
-            entity.HasMany(x => x.Ingredients).WithOptional();
+            modelBuilder.Configurations.AddFromAssembly(typeof(PizzaShopContext).Assembly);
         }
     }
 }
