@@ -11,6 +11,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Castle.DynamicProxy;
+using Ninject;
+using RestSample.Logic.Aspects;
+using System.Threading;
 
 namespace RestSample.Logic
 {
@@ -22,10 +26,14 @@ namespace RestSample.Logic
             var mapper = Mapper.Configuration.CreateMapper();
 
             this.Bind<IMapper>().ToConstant(mapper);
-
             this.Bind<PizzaShopContext>().ToSelf();
-            this.Bind<IPizzaService>().To<PizzaService>();
-            this.Bind<IValidator<PizzaDto>>().To<PizzaDtoValidator>();            // .....
+            this.Bind<IValidator<PizzaDto>>().To<PizzaDtoValidator>();
+
+            this.Bind<IPizzaService>().ToMethod(ctx =>
+            {
+                var service = new PizzaService(ctx.Kernel.Get<PizzaShopContext>(), ctx.Kernel.Get<IMapper>());
+                return new ProxyGenerator().CreateInterfaceProxyWithTarget<IPizzaService>(service, new ValidationInterceptor(ctx.Kernel));
+            });// .....
         }
     }
 }

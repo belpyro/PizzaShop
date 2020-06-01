@@ -1,4 +1,5 @@
-﻿using RestSample.Logic.Models;
+﻿using CSharpFunctionalExtensions;
+using RestSample.Logic.Models;
 using System;
 using System.Collections.Generic;
 
@@ -10,7 +11,7 @@ namespace RestSample.Logic.Services
 
         PizzaDto GetById(int id);
 
-        PizzaDto Add(PizzaDto model);
+        Result<PizzaDto> Add(PizzaDto model);
 
         void Update(PizzaDto model);
 

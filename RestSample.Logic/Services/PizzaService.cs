@@ -1,35 +1,34 @@
 ﻿using AutoMapper;
+using CSharpFunctionalExtensions;
 using FluentValidation;
+using JetBrains.Annotations;
 using RestSample.Data.Contexts;
 using RestSample.Data.Models;
 using RestSample.Logic.Models;
+using RestSample.Logic.Validators;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RestSample.Logic.Services
 {
-    internal class PizzaService : IPizzaService
+    public class PizzaService : IPizzaService
     {
-        private static List<PizzaDto> _pizzas = PizzaFaker.Generate();
         private readonly PizzaShopContext _context;
         private readonly IMapper _mapper;
-        private readonly IValidator<PizzaDto> _validator;
 
-        public PizzaService(PizzaShopContext context, IMapper mapper, IValidator<PizzaDto> validator)
+        public PizzaService([NotNull]PizzaShopContext context, [NotNull]IMapper mapper)
         {
             this._context = context;
             this._mapper = mapper;
-            this._validator = validator;
         }
 
         public IEnumerable<PizzaDto> GetAll()
         {
             //return _context.Pizzas.ProjectToArray<PizzaDto>(_mapper.ConfigurationProvider);
-            var models = _context.Pizzas.AsNoTracking().Include("Ingredients").ToArray();
+            var models = _context.Pizzas.AsNoTracking().Include(x => x.Ingredients).ToArray();
             return _mapper.Map<IEnumerable<PizzaDto>>(models);
         }
 
@@ -44,18 +43,22 @@ namespace RestSample.Logic.Services
             //return _context.Pizzas.Where(x => x.Id == id).ProjectToSingleOrDefault<PizzaDto>(_mapper.ConfigurationProvider);
         }
 
-        public PizzaDto Add(PizzaDto model)
+        public Result<PizzaDto> Add(PizzaDto model)
         {
-            // validation
-            _validator.ValidateAndThrow(model, "PostValidation");
+            try
+            {
+                var dbModel = _mapper.Map<PizzaDb>(model);
 
-            var dbModel = _mapper.Map<PizzaDb>(model);
+                _context.Pizzas.Add(dbModel);
+                _context.SaveChanges();
 
-            _context.Pizzas.Add(dbModel);
-            _context.SaveChanges();
-
-            model.Id = dbModel.Id;
-            return model;
+                model.Id = dbModel.Id;
+                return Result.Success(model);
+            }
+            catch (DbUpdateException ex)
+            {
+                return Result.Failure<PizzaDto>(ex.Message);
+            }
         }
 
         public void Update(PizzaDto model)

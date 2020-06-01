@@ -51,15 +51,9 @@ namespace RestSampleNew.Controllers
                 return BadRequest(ModelState);
             }
 
-            try
-            {
-                model = _pizzaService.Add(model);
-                return Created($"/pizzas/{model.Id}", model);
-            }
-            catch (ValidationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var result = _pizzaService.Add(model);
+            return result.IsSuccess ? Created($"/pizzas/{result.Value.Id}", result.Value) : (IHttpActionResult)BadRequest(result.Error);
+
         }
 
         //UPDATE

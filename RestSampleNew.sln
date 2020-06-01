@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSample.Logic", "RestSam
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSample.Data", "RestSample.Data\RestSample.Data.csproj", "{4AD0EB39-AE32-4521-98E2-604FFF1864B5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSample.Logic.Test", "RestSample.Logic.Test\RestSample.Logic.Test.csproj", "{CB874DCE-1EEE-4063-9BA7-E63CF48992DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{4AD0EB39-AE32-4521-98E2-604FFF1864B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4AD0EB39-AE32-4521-98E2-604FFF1864B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4AD0EB39-AE32-4521-98E2-604FFF1864B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB874DCE-1EEE-4063-9BA7-E63CF48992DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB874DCE-1EEE-4063-9BA7-E63CF48992DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB874DCE-1EEE-4063-9BA7-E63CF48992DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB874DCE-1EEE-4063-9BA7-E63CF48992DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
