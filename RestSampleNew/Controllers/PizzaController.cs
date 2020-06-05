@@ -25,7 +25,8 @@ namespace RestSampleNew.Controllers
         [Route("")]
         public IHttpActionResult GetAll()
         {
-            return Ok(_pizzaService.GetAll());
+            var result = _pizzaService.GetAll();
+            return result.IsSuccess ? Ok(result.Value) : (IHttpActionResult)StatusCode(HttpStatusCode.InternalServerError);
         }
 
 
@@ -34,8 +35,12 @@ namespace RestSampleNew.Controllers
         [Route("{id}")]
         public IHttpActionResult GetById(int id)
         {
-            var pizza = _pizzaService.GetById(id);
-            return pizza == null ? (IHttpActionResult)NotFound() : Ok(pizza);
+            var result = _pizzaService.GetById(id);
+            if (result.IsFailure)
+            {
+                return StatusCode(HttpStatusCode.InternalServerError);
+            }
+            return result.Value.HasNoValue ? (IHttpActionResult)NotFound() : Ok(result.Value.Value);
         }
 
         //Swagger - OpenApi

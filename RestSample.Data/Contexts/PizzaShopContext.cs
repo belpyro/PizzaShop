@@ -1,5 +1,6 @@
 ﻿using RestSample.Data.Migrations;
 using RestSample.Data.Models;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -14,8 +15,12 @@ namespace RestSample.Data.Contexts
     {
         public PizzaShopContext()
         {
+        }
+
+        public PizzaShopContext(ILogger logger)
+        {
             Database.SetInitializer<PizzaShopContext>(new MigrateDatabaseToLatestVersion<PizzaShopContext, Configuration>());
-            Database.Log = msg => Debug.WriteLine(msg);
+            Database.Log = msg => logger.Debug(msg);
         }
 
         public DbSet<PizzaDb> Pizzas { get; set; }

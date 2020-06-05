@@ -6,10 +6,12 @@ using RestSample.Data.Contexts;
 using RestSample.Data.Models;
 using RestSample.Logic.Models;
 using RestSample.Logic.Validators;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Data.SqlClient;
 using System.Linq;
 
 namespace RestSample.Logic.Services
@@ -18,29 +20,51 @@ namespace RestSample.Logic.Services
     {
         private readonly PizzaShopContext _context;
         private readonly IMapper _mapper;
+        private readonly ILogger _logger;
 
-        public PizzaService([NotNull]PizzaShopContext context, [NotNull]IMapper mapper)
+        public PizzaService([NotNull]PizzaShopContext context,
+            [NotNull]IMapper mapper,
+            [NotNull] ILogger logger)
         {
             this._context = context;
             this._mapper = mapper;
+            this._logger = logger;
         }
 
-        public IEnumerable<PizzaDto> GetAll()
+        public Result<IEnumerable<PizzaDto>> GetAll()
         {
             //return _context.Pizzas.ProjectToArray<PizzaDto>(_mapper.ConfigurationProvider);
-            var models = _context.Pizzas.AsNoTracking().Include(x => x.Ingredients).ToArray();
-            return _mapper.Map<IEnumerable<PizzaDto>>(models);
+            try
+            {
+                _logger.Warning("Get all pizzas requested by anonymous");
+                var models = _context.Pizzas.AsNoTracking().Include(x => x.Ingredients).ToArray();
+                return Result.Success(_mapper.Map<IEnumerable<PizzaDto>>(models));
+            }
+            catch (SqlException ex)
+            {
+                _logger.Error("Connection to db is failed", ex);
+                return Result.Failure<IEnumerable<PizzaDto>>(ex.Message);
+            }
         }
 
-        public PizzaDto GetById(int id)
+        public Result<Maybe<PizzaDto>> GetById(int id)
         {
-            var dbModel = new PizzaDb { Id = id };
-            _context.Pizzas.Attach(dbModel);
-            var entry = _context.Entry(dbModel);
+            //var dbModel = new PizzaDb { Id = id };
+            //_context.Pizzas.Attach(dbModel);
+            //var entry = _context.Entry(dbModel);
 
-            entry.Collection(x => x.Ingredients).Load();
-            return _mapper.Map<PizzaDto>(entry.Entity);
-            //return _context.Pizzas.Where(x => x.Id == id).ProjectToSingleOrDefault<PizzaDto>(_mapper.ConfigurationProvider);
+            //entry.Collection(x => x.Ingredients).Load();
+            //return _mapper.Map<PizzaDto>(entry.Entity);
+            try
+            {
+                Maybe<PizzaDto> pizza = _context.Pizzas.Where(x => x.Id == id).ProjectToSingleOrDefault<PizzaDto>(_mapper.ConfigurationProvider);
+                return Result.Success(pizza);
+            }
+            catch (SqlException ex)
+            {
+                return Result.Failure<Maybe<PizzaDto>>(ex.Message);
+            }
+
         }
 
         public Result<PizzaDto> Add(PizzaDto model)

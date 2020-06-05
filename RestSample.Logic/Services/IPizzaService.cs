@@ -7,9 +7,9 @@ namespace RestSample.Logic.Services
 {
     public interface IPizzaService: IDisposable
     {
-        IEnumerable<PizzaDto> GetAll();
+        Result<IEnumerable<PizzaDto>> GetAll();
 
-        PizzaDto GetById(int id);
+        Result<Maybe<PizzaDto>> GetById(int id);
 
         Result<PizzaDto> Add(PizzaDto model);
 

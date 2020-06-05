@@ -15,6 +15,7 @@ using Castle.DynamicProxy;
 using Ninject;
 using RestSample.Logic.Aspects;
 using System.Threading;
+using Serilog;
 
 namespace RestSample.Logic
 {
@@ -31,7 +32,7 @@ namespace RestSample.Logic
 
             this.Bind<IPizzaService>().ToMethod(ctx =>
             {
-                var service = new PizzaService(ctx.Kernel.Get<PizzaShopContext>(), ctx.Kernel.Get<IMapper>());
+                var service = new PizzaService(ctx.Kernel.Get<PizzaShopContext>(), ctx.Kernel.Get<IMapper>(), ctx.Kernel.Get<ILogger>());
                 return new ProxyGenerator().CreateInterfaceProxyWithTarget<IPizzaService>(service, new ValidationInterceptor(ctx.Kernel));
             });// .....
         }

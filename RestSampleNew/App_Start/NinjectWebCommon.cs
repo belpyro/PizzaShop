@@ -4,6 +4,9 @@
 namespace RestSampleNew.App_Start
 {
     using System;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Reflection;
     using System.Web;
 
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
@@ -13,6 +16,7 @@ namespace RestSampleNew.App_Start
     using Ninject.Web.Common.WebHost;
     using RestSample.Logic;
     using RestSample.Logic.Services;
+    using Serilog;
 
     public static class NinjectWebCommon
     {
@@ -63,6 +67,23 @@ namespace RestSampleNew.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
+            var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+            var logger = new LoggerConfiguration()
+                .WriteTo.Debug()
+                .WriteTo.Console()
+                .WriteTo.File(Path.Combine(path,"log.txt"))
+                .Enrich.WithHttpRequestType()
+                .Enrich.WithWebApiControllerName()
+                .Enrich.WithWebApiActionName()
+#if QA || DEBUG
+                .MinimumLevel.Verbose()
+#elif RELEASE
+                 .MinimumLevel.Warning()
+#endif
+                .CreateLogger();
+
+            kernel.Bind<ILogger>().ToConstant(logger);
             kernel.Load(new LogicDIModule());
         }
     }

@@ -22,8 +22,12 @@ namespace RestSample.Logic.Aspects
 
         public void Intercept(IInvocation invocation)
         {
-            var arg = invocation.Arguments[0] as PizzaDto;
-            if (arg == null) invocation.Proceed();
+            var arg = invocation.Arguments.OfType<PizzaDto>().FirstOrDefault();
+            if (arg == null)
+            {
+                invocation.Proceed();
+                return;
+            }
 
             var validator = _kernel.Get<IValidator<PizzaDto>>();
             var validationResult = validator.Validate(arg, "PostValidation"); // contract
