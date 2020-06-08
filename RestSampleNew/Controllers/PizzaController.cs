@@ -2,6 +2,7 @@
 using FluentValidation.WebApi;
 using RestSample.Logic.Models;
 using RestSample.Logic.Services;
+using System;
 using System.Net;
 using System.Web.Http;
 

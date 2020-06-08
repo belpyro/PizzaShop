@@ -47,6 +47,12 @@
     <Reference Include="CSharpFunctionalExtensions, Version=2.8.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\CSharpFunctionalExtensions.2.8.0\lib\net461\CSharpFunctionalExtensions.dll</HintPath>
     </Reference>
+    <Reference Include="Elmah, Version=1.2.14706.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
+    </Reference>
+    <Reference Include="Elmah.Contrib.WebApi, Version=1.0.10.25, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Elmah.Contrib.WebApi.1.0.10.25\lib\net45\Elmah.Contrib.WebApi.dll</HintPath>
+    </Reference>
     <Reference Include="FluentValidation, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7de548da2fbae0f0, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentValidation.8.6.1\lib\net45\FluentValidation.dll</HintPath>
     </Reference>
@@ -144,6 +150,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Readme\Elmah.txt" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
   </ItemGroup>
