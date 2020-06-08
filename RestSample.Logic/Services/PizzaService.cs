@@ -108,6 +108,20 @@ namespace RestSample.Logic.Services
             _context.SaveChanges(); //DELETE
         }
 
+
+        public Result<IEnumerable<PizzaDto>> GetByName(string name)
+        {
+            try
+            {
+                return _context.Pizzas.AsNoTracking().Where(p => p.Name.Contains(name)).ProjectToArray<PizzaDto>(_mapper.ConfigurationProvider);
+            }
+            catch (SqlException ex)
+            {
+                _logger.Error(ex, "Cannot connect to db");
+                return Result.Failure<IEnumerable<PizzaDto>>("Cannot connect to db");
+            }
+        }
+
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
 
@@ -144,6 +158,7 @@ namespace RestSample.Logic.Services
             // TODO: uncomment the following line if the finalizer is overridden above.
             // GC.SuppressFinalize(this);
         }
+
 
         #endregion
     }

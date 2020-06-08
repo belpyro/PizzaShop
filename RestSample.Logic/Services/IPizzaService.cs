@@ -16,5 +16,7 @@ namespace RestSample.Logic.Services
         void Update(PizzaDto model);
 
         void Delete(int id);
+
+        Result<IEnumerable<PizzaDto>> GetByName(string name);
     }
 }

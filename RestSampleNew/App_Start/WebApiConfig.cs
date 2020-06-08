@@ -1,7 +1,9 @@
 ﻿using Elmah.Contrib.WebApi;
 using FluentValidation.WebApi;
+using RestSampleNew.Helpers;
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
+using System.Web.Http.Routing;
 
 namespace RestSampleNew
 {
@@ -11,9 +13,11 @@ namespace RestSampleNew
         {
             //Elmah
             // Web API configuration and services
+            var resolver = new DefaultInlineConstraintResolver();
+            resolver.ConstraintMap.Add("pizza-name", typeof(PizzaNameConstraint));
 
             // Web API routes
-            config.MapHttpAttributeRoutes();
+            config.MapHttpAttributeRoutes(resolver);
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",

@@ -30,11 +30,29 @@ namespace RestSampleNew.Controllers
             return result.IsSuccess ? Ok(result.Value) : (IHttpActionResult)StatusCode(HttpStatusCode.InternalServerError);
         }
 
-
-        // api/pizzas/5
         [HttpGet]
-        [Route("{id}")]
-        public IHttpActionResult GetById(int id)
+        [Route("names/{*demo}")]
+        public IHttpActionResult GetAllByWildCard(string demo)
+        {
+            var result = _pizzaService.GetAll();
+            return result.IsSuccess ? Ok(result.Value) : (IHttpActionResult)StatusCode(HttpStatusCode.InternalServerError);
+        }
+
+        // names/highest
+        // names/for/lowest/cost
+
+        [HttpGet]
+        [Route("names/{rating}")]
+        public IHttpActionResult GetAllByRating(string rating)
+        {
+            var result = _pizzaService.GetAll();
+            return result.IsSuccess ? Ok(result.Value) : (IHttpActionResult)StatusCode(HttpStatusCode.InternalServerError);
+        }
+
+        // api/pizzas/all/5
+        [HttpGet]
+        [Route("all/{id:int}", Name = "GetPizzaById")]
+        public IHttpActionResult GetById(int id) //1.. int.Max
         {
             var result = _pizzaService.GetById(id);
             if (result.IsFailure)
@@ -42,6 +60,13 @@ namespace RestSampleNew.Controllers
                 return StatusCode(HttpStatusCode.InternalServerError);
             }
             return result.Value.HasNoValue ? (IHttpActionResult)NotFound() : Ok(result.Value.Value);
+        }
+
+        [HttpGet, Route("{name:pizza-name}")]
+        public  IHttpActionResult GetByName(string name)
+        {
+            var result = _pizzaService.GetByName(name);
+            return result.IsSuccess ? Ok(result.Value) : (IHttpActionResult)StatusCode(HttpStatusCode.InternalServerError);
         }
 
         //Swagger - OpenApi
@@ -58,13 +83,15 @@ namespace RestSampleNew.Controllers
             }
 
             var result = _pizzaService.Add(model);
-            return result.IsSuccess ? Created($"/pizzas/{result.Value.Id}", result.Value) : (IHttpActionResult)BadRequest(result.Error);
+            var url = Url.Link("GetPizzaById", new { id = result.Value.Id });
+
+            return result.IsSuccess ? Created(url, result.Value) : (IHttpActionResult)BadRequest(result.Error);
 
         }
 
         //UPDATE
         [HttpPut]
-        [Route("{id}")]
+        [Route("{id:int:min(1)}")]
         public IHttpActionResult Update(int id, [FromBody]PizzaDto model)
         {
             _pizzaService.Update(model);
