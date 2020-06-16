@@ -197,6 +197,9 @@
   <ItemGroup>
     <Compile Include="App_Start\CustomValidatorFactory.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\Filter.cs" />
+    <Compile Include="Controllers\FilterBinder.cs" />
+    <Compile Include="Controllers\FilterConverter.cs" />
     <Compile Include="Controllers\PizzaController.cs" />
     <Compile Include="Helpers\PizzaNameConstraint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

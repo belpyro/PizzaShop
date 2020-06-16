@@ -7,13 +7,7 @@ namespace RestSampleNew
 {
     public class CustomValidatorFactory : IValidatorFactory
     {
-        private IDependencyResolver _dependencyResolver;
         private IKernel kernel;
-
-        public CustomValidatorFactory(IDependencyResolver dependencyResolver)
-        {
-            this._dependencyResolver = dependencyResolver;
-        }
 
         public CustomValidatorFactory(IKernel kernel)
         {
@@ -22,12 +16,12 @@ namespace RestSampleNew
 
         public IValidator<T> GetValidator<T>()
         {
-           return kernel.GetService(typeof(T)) as IValidator<T>;
+           return kernel.TryGet(typeof(T)) as IValidator<T>;
         }
 
         public IValidator GetValidator(Type type)
         {
-             return kernel.GetService(type) as IValidator;
+             return kernel.TryGet(type) as IValidator;
         }
     }
 }

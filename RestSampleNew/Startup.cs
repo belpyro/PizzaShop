@@ -4,7 +4,10 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
+using System.Web.Http.ModelBinding;
+using System.Web.Http.ModelBinding.Binders;
 using System.Web.Http.Routing;
+using System.Web.Http.ValueProviders;
 using Elmah.Contrib.WebApi;
 using FluentValidation.WebApi;
 using Microsoft.Owin;
@@ -14,6 +17,7 @@ using Ninject.Web.WebApi.OwinHost;
 using NSwag.AspNet.Owin;
 using Owin;
 using RestSample.Logic;
+using RestSampleNew.Controllers;
 using RestSampleNew.Helpers;
 using Serilog;
 
@@ -40,6 +44,9 @@ namespace RestSampleNew
             );
 
             config.Services.Replace(typeof(IExceptionLogger), new ElmahExceptionLogger());
+            var provider = new SimpleModelBinderProvider(typeof(Filter), new FilterBinder());
+
+            config.Services.Insert(typeof(ModelBinderProvider), 0, provider);
 
             var kernel = new StandardKernel();
             var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -58,6 +65,8 @@ namespace RestSampleNew
 #endif
                 .CreateLogger();
 
+            config.EnsureInitialized();
+
             kernel.Bind<ILogger>().ToConstant(logger);
             kernel.Load(new LogicDIModule());
 
@@ -66,8 +75,7 @@ namespace RestSampleNew
                 opt.ValidatorFactory = new CustomValidatorFactory(kernel);
             });
 
-            app.UseSwagger(typeof(Startup).Assembly).UseSwaggerUi3()
-                .UseNinjectMiddleware(() => kernel).UseNinjectWebApi(config);
+            app.UseSwagger(typeof(Startup).Assembly).UseSwaggerUi3().UseNinjectMiddleware(() => kernel).UseNinjectWebApi(config);
         }
     }
 }

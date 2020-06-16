@@ -4,7 +4,11 @@ using RestSample.Logic.Models;
 using RestSample.Logic.Services;
 using System;
 using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
+using System.Web.Http.ModelBinding;
 
 namespace RestSampleNew.Controllers
 {
@@ -24,10 +28,35 @@ namespace RestSampleNew.Controllers
         //Get by filter
         [HttpGet]
         [Route("")]
-        public IHttpActionResult GetAll()
+        public async Task<IHttpActionResult> GetAllAsync()
         {
-            var result = _pizzaService.GetAll();
+            var result = await _pizzaService.GetAllAsync();
             return result.IsSuccess ? Ok(result.Value) : (IHttpActionResult)StatusCode(HttpStatusCode.InternalServerError);
+        }
+
+        //// api/pizzas/all/5
+        [HttpGet]
+        [Route("all/{id:int}", Name = "GetPizzaById")]
+        public IHttpActionResult GetById(int id) //1.. int.Max
+        {
+            var result = _pizzaService.GetById(id);
+            if (result.IsFailure)
+            {
+                return StatusCode(HttpStatusCode.InternalServerError);
+            }
+            return result.Value.HasNoValue ? (IHttpActionResult)NotFound() : Ok(result.Value.Value);
+        }
+
+        [HttpGet]
+        [Route("all/filter", Name = "GetByFilter")]
+        public IHttpActionResult GetByFilter([ModelBinder(typeof(FilterBinder))]Filter filter) //1.. int.Max
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            return Ok();
         }
 
         [HttpGet]
@@ -49,21 +78,10 @@ namespace RestSampleNew.Controllers
             return result.IsSuccess ? Ok(result.Value) : (IHttpActionResult)StatusCode(HttpStatusCode.InternalServerError);
         }
 
-        // api/pizzas/all/5
-        [HttpGet]
-        [Route("all/{id:int}", Name = "GetPizzaById")]
-        public IHttpActionResult GetById(int id) //1.. int.Max
-        {
-            var result = _pizzaService.GetById(id);
-            if (result.IsFailure)
-            {
-                return StatusCode(HttpStatusCode.InternalServerError);
-            }
-            return result.Value.HasNoValue ? (IHttpActionResult)NotFound() : Ok(result.Value.Value);
-        }
+
 
         [HttpGet, Route("{name:pizza-name}")]
-        public  IHttpActionResult GetByName(string name)
+        public IHttpActionResult GetByName(string name)
         {
             var result = _pizzaService.GetByName(name);
             return result.IsSuccess ? Ok(result.Value) : (IHttpActionResult)StatusCode(HttpStatusCode.InternalServerError);
@@ -75,7 +93,7 @@ namespace RestSampleNew.Controllers
         //INSERT
         [HttpPost]
         [Route("")]
-        public IHttpActionResult Add([CustomizeValidator(RuleSet = "PreValidation")][FromBody]PizzaDto model)
+        public IHttpActionResult Add([CustomizeValidator(RuleSet = "PreValidation")]PizzaDto model)
         {
             if (!ModelState.IsValid)
             {

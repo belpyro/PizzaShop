@@ -11,26 +11,26 @@ namespace RestSampleNew
     {
         public static void Register(HttpConfiguration config)
         {
-            //Elmah
-            // Web API configuration and services
-            var resolver = new DefaultInlineConstraintResolver();
-            resolver.ConstraintMap.Add("pizza-name", typeof(PizzaNameConstraint));
+            ////Elmah
+            //// Web API configuration and services
+            //var resolver = new DefaultInlineConstraintResolver();
+            //resolver.ConstraintMap.Add("pizza-name", typeof(PizzaNameConstraint));
 
-            // Web API routes
-            config.MapHttpAttributeRoutes(resolver);
+            //// Web API routes
+            //config.MapHttpAttributeRoutes(resolver);
 
-            config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
-            );
+            //config.Routes.MapHttpRoute(
+            //    name: "DefaultApi",
+            //    routeTemplate: "api/{controller}/{id}",
+            //    defaults: new { id = RouteParameter.Optional }
+            //);
 
-            config.Services.Replace(typeof(IExceptionLogger), new ElmahExceptionLogger());
+            //config.Services.Replace(typeof(IExceptionLogger), new ElmahExceptionLogger());
 
-            FluentValidationModelValidatorProvider.Configure(config, opt =>
-            {
-                opt.ValidatorFactory = new CustomValidatorFactory(config.DependencyResolver);
-            });
+            //FluentValidationModelValidatorProvider.Configure(config, opt =>
+            //{
+            //    opt.ValidatorFactory = new CustomValidatorFactory(config.DependencyResolver);
+            //});
         }
     }
 }

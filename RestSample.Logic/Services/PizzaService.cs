@@ -13,6 +13,7 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace RestSample.Logic.Services
 {
@@ -38,6 +39,22 @@ namespace RestSample.Logic.Services
             {
                 _logger.Warning("Get all pizzas requested by anonymous");
                 var models = _context.Pizzas.AsNoTracking().Include(x => x.Ingredients).ToArray();
+                return Result.Success(_mapper.Map<IEnumerable<PizzaDto>>(models));
+            }
+            catch (SqlException ex)
+            {
+                _logger.Error("Connection to db is failed", ex);
+                return Result.Failure<IEnumerable<PizzaDto>>(ex.Message);
+            }
+        }
+
+
+        public async Task<Result<IEnumerable<PizzaDto>>> GetAllAsync()
+        {
+            try
+            {
+                _logger.Warning("Get all pizzas requested by anonymous");
+                var models = await _context.Pizzas.AsNoTracking().Include(x => x.Ingredients).ProjectToArrayAsync<PizzaDto>().ConfigureAwait(false);
                 return Result.Success(_mapper.Map<IEnumerable<PizzaDto>>(models));
             }
             catch (SqlException ex)
@@ -158,6 +175,7 @@ namespace RestSample.Logic.Services
             // TODO: uncomment the following line if the finalizer is overridden above.
             // GC.SuppressFinalize(this);
         }
+
 
 
         #endregion
