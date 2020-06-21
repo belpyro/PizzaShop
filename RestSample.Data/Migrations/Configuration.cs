@@ -1,5 +1,6 @@
 ﻿namespace RestSample.Data.Migrations
 {
+    using Microsoft.AspNet.Identity.EntityFramework;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
@@ -19,6 +20,11 @@
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method
             //  to avoid creating duplicate seed data.
+
+            if (context.Roles.Any()) return;
+
+            context.Roles.Add(new IdentityRole("user"));
+            context.SaveChanges();
         }
     }
 }

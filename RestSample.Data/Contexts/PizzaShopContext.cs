@@ -1,4 +1,5 @@
-﻿using RestSample.Data.Migrations;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using RestSample.Data.Migrations;
 using RestSample.Data.Models;
 using Serilog;
 using System;
@@ -9,9 +10,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace RestSample.Data.Contexts
 {
-    public sealed class PizzaShopContext : DbContext
+    public sealed class PizzaShopContext : IdentityDbContext
     {
         public PizzaShopContext()
         {
