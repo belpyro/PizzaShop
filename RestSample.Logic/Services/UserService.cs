@@ -70,5 +70,14 @@ namespace RestSample.Logic.Services
             var users = await _userManager.Users.ProjectToListAsync<UserDto>(_mapper.ConfigurationProvider);
             return Result.Success((IReadOnlyCollection<UserDto>)users.AsReadOnly());
         }
+
+        public async Task<Maybe<UserDto>> GetUser(string username, string password)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+            if (user == null) return null;
+
+            var isValid = await _userManager.CheckPasswordAsync(user, password);
+            return isValid ? _mapper.Map<UserDto>(user) : null;
+        }
     }
 }

@@ -26,7 +26,7 @@ namespace RestSampleNew.Controllers
         //Get all
         //Get by id
         //Get by filter
-        [HttpGet]
+        [HttpGet, Authorize]
         [Route("")]
         public async Task<IHttpActionResult> GetAllAsync()
         {

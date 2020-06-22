@@ -16,5 +16,7 @@ namespace RestSample.Logic.Services
         Task<Result> ChangePassword(string userId, string token, string newPassword);
 
         Task<Result<IReadOnlyCollection<UserDto>>> GetAllUsers();
+
+        Task<Maybe<UserDto>> GetUser(string username, string password);
     }
 }
