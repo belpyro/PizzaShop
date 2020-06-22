@@ -94,13 +94,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RestSample.Data\RestSample.Data.csproj">
+    <ProjectReference Include="..\RestSample.Data\PizzaShop.Data.csproj">
       <Project>{4ad0eb39-ae32-4521-98e2-604fff1864b5}</Project>
-      <Name>RestSample.Data</Name>
+      <Name>PizzaShop.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\RestSample.Logic\RestSample.Logic.csproj">
+    <ProjectReference Include="..\RestSample.Logic\PizzaShop.Logic.csproj">
       <Project>{4f55b616-04a7-41fc-b7f8-610469d06992}</Project>
-      <Name>RestSample.Logic</Name>
+      <Name>PizzaShop.Logic</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

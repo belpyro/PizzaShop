@@ -10,8 +10,8 @@
     <ProjectGuid>{4F55B616-04A7-41FC-B7F8-610469D06992}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RestSample.Logic</RootNamespace>
-    <AssemblyName>RestSample.Logic</AssemblyName>
+    <RootNamespace>PizzaShop.Logic</RootNamespace>
+    <AssemblyName>PizzaShop.Logic</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -140,9 +140,9 @@
     <Compile Include="Validators\PizzaDtoValidator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RestSample.Data\RestSample.Data.csproj">
+    <ProjectReference Include="..\RestSample.Data\PizzaShop.Data.csproj">
       <Project>{4ad0eb39-ae32-4521-98e2-604fff1864b5}</Project>
-      <Name>RestSample.Data</Name>
+      <Name>PizzaShop.Data</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

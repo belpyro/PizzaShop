@@ -12,8 +12,8 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RestSampleNew</RootNamespace>
-    <AssemblyName>RestSampleNew</AssemblyName>
+    <RootNamespace>PizzaShop.Web</RootNamespace>
+    <AssemblyName>PizzaShop.Web</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
@@ -235,9 +235,9 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RestSample.Logic\RestSample.Logic.csproj">
+    <ProjectReference Include="..\RestSample.Logic\PizzaShop.Logic.csproj">
       <Project>{4f55b616-04a7-41fc-b7f8-610469d06992}</Project>
-      <Name>RestSample.Logic</Name>
+      <Name>PizzaShop.Logic</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

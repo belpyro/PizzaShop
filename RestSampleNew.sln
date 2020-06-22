@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSampleNew", "RestSampleNew\RestSampleNew.csproj", "{FFA9E016-4144-4345-826E-8486CFD6B0AA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaShop.Web", "RestSampleNew\PizzaShop.Web.csproj", "{FFA9E016-4144-4345-826E-8486CFD6B0AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSample.Logic", "RestSample.Logic\RestSample.Logic.csproj", "{4F55B616-04A7-41FC-B7F8-610469D06992}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaShop.Logic", "RestSample.Logic\PizzaShop.Logic.csproj", "{4F55B616-04A7-41FC-B7F8-610469D06992}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSample.Data", "RestSample.Data\RestSample.Data.csproj", "{4AD0EB39-AE32-4521-98E2-604FFF1864B5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaShop.Data", "RestSample.Data\PizzaShop.Data.csproj", "{4AD0EB39-AE32-4521-98E2-604FFF1864B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSample.Logic.Test", "RestSample.Logic.Test\RestSample.Logic.Test.csproj", "{CB874DCE-1EEE-4063-9BA7-E63CF48992DF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaShop.Logic.Test", "RestSample.Logic.Test\PizzaShop.Logic.Test.csproj", "{CB874DCE-1EEE-4063-9BA7-E63CF48992DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
