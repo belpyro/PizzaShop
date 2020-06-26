@@ -40,7 +40,7 @@ namespace RestSample.Logic
 
             //register asp.net identity
 
-            this.Bind<IUserStore<IdentityUser>>().To<UserStore<IdentityUser>>();
+            this.Bind<IUserStore<IdentityUser>>().ToMethod(ctx => new UserStore<IdentityUser>(ctx.Kernel.Get<PizzaShopContext>()));
             this.Bind<UserManager<IdentityUser>>().ToMethod(ctx =>
             {
                 var manager = new UserManager<IdentityUser>(ctx.Kernel.Get<IUserStore<IdentityUser>>());

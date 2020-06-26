@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using Microsoft.AspNet.Identity.Owin;
 using RestSample.Logic.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -18,5 +19,7 @@ namespace RestSample.Logic.Services
         Task<Result<IReadOnlyCollection<UserDto>>> GetAllUsers();
 
         Task<Maybe<UserDto>> GetUser(string username, string password);
+
+        Task<Result> RegisterExternalUser(ExternalLoginInfo info);
     }
 }

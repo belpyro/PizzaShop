@@ -10,11 +10,13 @@ using FluentValidation.WebApi;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
+using Microsoft.Owin.Security.Google;
 using Ninject;
 using Ninject.Web.Common.OwinHost;
 using Ninject.Web.WebApi.OwinHost;
 using NSwag.AspNet.Owin;
 using Owin;
+using PizzaShop.Web.Middleware;
 using RestSample.Logic;
 using RestSampleNew.Controllers;
 using RestSampleNew.Helpers;
@@ -81,6 +83,17 @@ namespace RestSampleNew
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie
             });
+
+            app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
+
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions
+            {
+                ClientId = "273410476984-el7qkveap4ss84963sbl5gr4qpkb6445.apps.googleusercontent.com",
+                ClientSecret = "MJM3XIpsQHPhAEHi-nL9dBvs",
+                AuthenticationType = "MyGoogle"
+            });
+
+            app.Map("/login/google", b => b.Use<GoogleAuthMiddleware>());
 
             app.UseSwagger(typeof(Startup).Assembly).UseSwaggerUi3().UseNinjectMiddleware(() => kernel).UseNinjectWebApi(config);
         }

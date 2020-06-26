@@ -15,11 +15,12 @@ namespace RestSample.Data.Contexts
 {
     public sealed class PizzaShopContext : IdentityDbContext
     {
-        public PizzaShopContext()
+        public PizzaShopContext() : base("PizzaDb")
         {
+
         }
 
-        public PizzaShopContext(ILogger logger)
+        public PizzaShopContext(ILogger logger) : base("PizzaDb")
         {
             Database.SetInitializer<PizzaShopContext>(new MigrateDatabaseToLatestVersion<PizzaShopContext, Configuration>());
             Database.Log = msg => logger.Debug(msg);

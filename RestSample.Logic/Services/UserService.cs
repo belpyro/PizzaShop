@@ -4,6 +4,7 @@ using FluentValidation;
 using Fody;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity.Owin;
 using RestSample.Logic.Extensions;
 using RestSample.Logic.Models;
 using System.Collections.Generic;
@@ -78,6 +79,17 @@ namespace RestSample.Logic.Services
 
             var isValid = await _userManager.CheckPasswordAsync(user, password);
             return isValid ? _mapper.Map<UserDto>(user) : null;
+        }
+
+        public async Task<Result> RegisterExternalUser(ExternalLoginInfo info)
+        {
+            var user = await _userManager.FindAsync(info.Login);
+            if (user != null) return Result.Success();
+
+            user = new IdentityUser(info.Email) { Email = info.Email };
+            await _userManager.CreateAsync(user);
+            await _userManager.AddLoginAsync(user.Id, info.Login);
+            return Result.Success();
         }
     }
 }
