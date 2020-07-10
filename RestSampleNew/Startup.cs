@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
 using System.Web.Http.ModelBinding;
@@ -21,6 +22,7 @@ using IdentityServer3.Core.Services.InMemory;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin;
+using Microsoft.Owin.Cors;
 using Microsoft.Owin.Extensions;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
@@ -131,7 +133,7 @@ namespace RestSampleNew
                 new Scope() { Name = "api", Type = ScopeType.Identity, Claims = new List<ScopeClaim> { new ScopeClaim("api-version", true) } }))
                 .UseInMemoryClients(new[] { client });
             factory.UserService = new Registration<IdentityServer3.Core.Services.IUserService>(new AspNetIdentityUserService<IdentityUser, string>(kernel.Get<UserManager<IdentityUser>>()));
-               // .UseInMemoryUsers(new List<InMemoryUser>() { user });
+            // .UseInMemoryUsers(new List<InMemoryUser>() { user });
 
             app.UseIdentityServer(new IdentityServerOptions
             {
@@ -161,6 +163,12 @@ namespace RestSampleNew
                 ValidAudiences = new[] { "https://localhost:44307/resources" }
             });
 
+            var provide = new CorsPolicyProvider();
+            provide.PolicyResolver = ctx => Task.FromResult(new System.Web.Cors.CorsPolicy { AllowAnyHeader = true, AllowAnyMethod = true, AllowAnyOrigin = true });
+
+            app.UseCors(new Microsoft.Owin.Cors.CorsOptions { PolicyProvider = provide });
+
+            app.UseStaticFiles();
             app.UseSwagger(typeof(Startup).Assembly).UseSwaggerUi3().UseNinjectMiddleware(() => kernel).UseNinjectWebApi(config);
         }
 

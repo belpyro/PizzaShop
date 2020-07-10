@@ -1,12 +1,8 @@
-﻿using FluentValidation;
-using FluentValidation.WebApi;
+﻿using FluentValidation.WebApi;
 using RestSample.Logic.Models;
 using RestSample.Logic.Services;
-using System;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
 using System.Web.Http.ModelBinding;
 
