@@ -10,19 +10,9 @@ import { CardComponent } from './components/core/card/card/card.component';
 import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    NavbarComponent,
-    LoginComponent,
-    CardComponent
-  ],
-  imports: [
-    BrowserModule,
-    HttpClientModule
-  ],
-  providers: [
-    PizzaService
-  ],
-  bootstrap: [AppComponent]
+  declarations: [AppComponent, NavbarComponent, LoginComponent, CardComponent],
+  imports: [BrowserModule, HttpClientModule],
+  providers: [],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

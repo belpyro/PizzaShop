@@ -1,9 +1,4 @@
 <app-navbar></app-navbar>
 <div class="container">
- <app-card></app-card>
- <app-card></app-card>
- <app-card></app-card>
- <app-card></app-card>
+  <app-card [pizza]="p" *ngFor="let p of pizzas"></app-card>
 </div>
-
-

@@ -1,3 +1,4 @@
+import { NotificationService } from './../../../services/notification.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavbarComponent implements OnInit {
 
-  constructor() { }
+  message: string;
+
+  constructor(private ntf: NotificationService) { }
 
   ngOnInit(): void {
+    this.ntf.Message$.subscribe(msg => this.message = msg);
   }
 
 }
