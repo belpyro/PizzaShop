@@ -10,11 +10,11 @@ export class NotificationService {
 
   constructor() { }
 
-  get Message$(){
+  get Message$() {
     return this.messageSubject.asObservable();
   }
 
-notify(message:string){
-  this.messageSubject.next(message);
-}
+  notify(message: string) {
+    this.messageSubject.next(message);
+  }
 }

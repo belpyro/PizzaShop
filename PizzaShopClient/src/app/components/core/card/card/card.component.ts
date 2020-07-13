@@ -22,7 +22,7 @@ export class CardComponent implements OnInit {
   constructor(
     public pizzaService: PizzaService,
     private ntf: NotificationService
-  ) {}
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

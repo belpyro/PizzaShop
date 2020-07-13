@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment';
 import { PizzaDto } from './../models/pizzaDto';
 import { LoginService } from './login.service';
 import { Injectable } from '@angular/core';
@@ -14,13 +15,13 @@ export class PizzaService {
 
   getPizzaById(id: number) {
     return this.http
-      .get<PizzaDto>(`http://demovm:50698/api/pizzas/all/${id}`)
+      .get<PizzaDto>(`${environment.backendUrl}/api/pizzas/all/${id}`)
       .pipe(share());
   }
 
-  getAllPizzas() {
+  getAll() {
     return this.http
-      .get<PizzaDto[]>(`http://demovm:50698/api/pizzas`)
-      .pipe(delay(2000), share());
+      .get<PizzaDto[]>(`${environment.backendUrl}/api/pizzas`)
+      .pipe(share());
   }
 }
