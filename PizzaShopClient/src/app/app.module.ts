@@ -12,17 +12,29 @@ import { NavbarComponent } from './components/main/navbar/navbar.component';
 import { LoginComponent } from './components/main/login/login/login.component';
 import { CardComponent } from './components/core/card/card/card.component';
 import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ProfileComponent } from './components/core/profile/profile.component';
+import { PizzaInfoComponent } from './components/core/pizza-info/pizza-info.component';
 
 @NgModule({
-  declarations: [AppComponent,
+  declarations: [
+    AppComponent,
     NavbarComponent,
     LoginComponent,
     CardComponent,
     PizzaListComponent,
     HomeComponent,
-    NotFoundComponent],
-  imports: [BrowserModule, HttpClientModule, PizzaRoutingModule],
+    NotFoundComponent,
+    ProfileComponent,
+    PizzaInfoComponent,
+  ],
+  imports: [
+    BrowserModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    PizzaRoutingModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

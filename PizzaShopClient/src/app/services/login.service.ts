@@ -5,11 +5,10 @@ import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class LoginService {
-
-  private loggedOnSubject = new BehaviorSubject<boolean>(false);
+  private loggedOnSubject = new BehaviorSubject<boolean>(true);
   private user: UserDto;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {}
 
   get LoggedOn$() {
     return this.loggedOnSubject.asObservable();
