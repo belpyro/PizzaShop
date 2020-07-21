@@ -94,6 +94,9 @@ namespace RestSampleNew
             //app.CreatePerOwinContext<PizzaShopDbContext>(() => { });
             //app.CreatePerOwinContext<UserManager<IdentityUser>(() => new UserManager<IdentityUser>(new UserStore<IdentityUser>(new System.Data.Entity.DbContext())));
 
+            app.UseStaticFiles();
+            app.UseSwagger(typeof(Startup).Assembly).UseSwaggerUi3(settings => settings.ServerUrl = "http://demovm:50698");
+
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie
@@ -168,8 +171,7 @@ namespace RestSampleNew
 
             app.UseCors(new Microsoft.Owin.Cors.CorsOptions { PolicyProvider = provide });
 
-            app.UseStaticFiles();
-            app.UseSwagger(typeof(Startup).Assembly).UseSwaggerUi3().UseNinjectMiddleware(() => kernel).UseNinjectWebApi(config);
+            app.UseNinjectMiddleware(() => kernel).UseNinjectWebApi(config);
         }
 
         private static X509Certificate2 LoadCertificate()
