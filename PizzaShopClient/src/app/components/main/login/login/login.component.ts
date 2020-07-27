@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder
   ) {
     this.loginGroup = this.fb.group({
-      email: [''],
+      username: [''],
       password: [''],
       remember: [true],
     });
@@ -44,5 +44,13 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.loginService.login();
+  }
+
+  loginWithPassword() {
+    console.log(this.loginGroup.value);
+    this.loginService.login(
+      this.loginGroup.value.username,
+      this.loginGroup.value.password
+    );
   }
 }

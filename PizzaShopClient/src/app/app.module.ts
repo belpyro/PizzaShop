@@ -15,6 +15,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ProfileComponent } from './components/core/profile/profile.component';
 import { PizzaInfoComponent } from './components/core/pizza-info/pizza-info.component';
+import { OAuthModule } from 'angular-oauth2-oidc';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { PizzaInfoComponent } from './components/core/pizza-info/pizza-info.comp
     ReactiveFormsModule,
     HttpClientModule,
     PizzaRoutingModule,
+    OAuthModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent],
