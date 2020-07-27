@@ -94,6 +94,10 @@ namespace RestSampleNew
             //app.CreatePerOwinContext<PizzaShopDbContext>(() => { });
             //app.CreatePerOwinContext<UserManager<IdentityUser>(() => new UserManager<IdentityUser>(new UserStore<IdentityUser>(new System.Data.Entity.DbContext())));
 
+            var provide = new CorsPolicyProvider();
+            provide.PolicyResolver = ctx => Task.FromResult(new System.Web.Cors.CorsPolicy { AllowAnyHeader = true, AllowAnyMethod = true, AllowAnyOrigin = true });
+
+            app.UseCors(new Microsoft.Owin.Cors.CorsOptions { PolicyProvider = provide });
             app.UseStaticFiles();
             app.UseSwagger(typeof(Startup).Assembly).UseSwaggerUi3(settings => settings.ServerUrl = "http://demovm:50698");
 
@@ -121,7 +125,18 @@ namespace RestSampleNew
                 AllowAccessToAllScopes = true,
                 ClientName = "Pizza Web Client",
                 Flow = Flows.AuthorizationCode,
-                RedirectUris = new List<string>() { "https://localhost:5555" }
+                RedirectUris = new List<string>() { "https://localhost:5555", "http://localhost:4200/index.html" },
+                PostLogoutRedirectUris = new List<string>() { "https://localhost:5555", "http://localhost:4200/login" }
+            };
+
+            var userClient = new Client()
+            {
+                ClientId = "PizzaUserClient",
+                ClientSecrets = new List<Secret>() { new Secret("secret".Sha256()) },
+                AllowAccessToAllScopes = true,
+                ClientName = "Pizza Web Client",
+                Flow = Flows.ResourceOwner,
+                RedirectUris = new List<string>() { "https://localhost:5555", "http://localhost:4200/index.html" }
             };
 
             var user = new InMemoryUser()
@@ -133,8 +148,8 @@ namespace RestSampleNew
             };
 
             factory.UseInMemoryScopes(StandardScopes.All.Append(
-                new Scope() { Name = "api", Type = ScopeType.Identity, Claims = new List<ScopeClaim> { new ScopeClaim("api-version", true) } }))
-                .UseInMemoryClients(new[] { client });
+                new Scope() { Name = "api", DisplayName = "Api", Description = "Access to API", Type = ScopeType.Resource, Claims = new List<ScopeClaim> { new ScopeClaim("api-version", true) } }))
+                .UseInMemoryClients(new[] { client, userClient });
             factory.UserService = new Registration<IdentityServer3.Core.Services.IUserService>(new AspNetIdentityUserService<IdentityUser, string>(kernel.Get<UserManager<IdentityUser>>()));
             // .UseInMemoryUsers(new List<InMemoryUser>() { user });
 
@@ -153,23 +168,20 @@ namespace RestSampleNew
                 },
                 SiteName = "PizzaShop",
                 Factory = factory,
-                SigningCertificate = LoadCertificate()
+                SigningCertificate = LoadCertificate(),
             }).UseIdentityServerBearerTokenAuthentication(new IdentityServer3.AccessTokenValidation.IdentityServerBearerTokenAuthenticationOptions
             {
-                Authority = "https://localhost:44307",
+                Authority = "http://localhost:50698",
                 ClientId = "PizzaWebClient",
                 ClientSecret = "secret",
                 RequireHttps = false,
                 ValidationMode = ValidationMode.Local,
-                IssuerName = "https://localhost:44307",
+                IssuerName = "http://localhost:50698",
                 SigningCertificate = LoadCertificate(),
-                ValidAudiences = new[] { "https://localhost:44307/resources" }
+                ValidAudiences = new[] { "http://localhost:50698/resources" }
             });
 
-            var provide = new CorsPolicyProvider();
-            provide.PolicyResolver = ctx => Task.FromResult(new System.Web.Cors.CorsPolicy { AllowAnyHeader = true, AllowAnyMethod = true, AllowAnyOrigin = true });
 
-            app.UseCors(new Microsoft.Owin.Cors.CorsOptions { PolicyProvider = provide });
 
             app.UseNinjectMiddleware(() => kernel).UseNinjectWebApi(config);
         }
