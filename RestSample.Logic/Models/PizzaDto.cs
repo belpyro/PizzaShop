@@ -2,12 +2,11 @@
 using RestSample.Logic.Validators;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 
 namespace RestSample.Logic.Models
 {
     [Validator(typeof(PizzaDtoValidator))]
-     public class PizzaDto//DTO Data Transfer Object
+    public class PizzaDto//DTO Data Transfer Object
     {
         public int Id { get; set; }
 

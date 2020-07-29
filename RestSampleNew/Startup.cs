@@ -125,8 +125,8 @@ namespace RestSampleNew
                 AllowAccessToAllScopes = true,
                 ClientName = "Pizza Web Client",
                 Flow = Flows.AuthorizationCode,
-                RedirectUris = new List<string>() { "https://localhost:5555", "http://localhost:4200/index.html" },
-                PostLogoutRedirectUris = new List<string>() { "https://localhost:5555", "http://localhost:4200/login" }
+                RedirectUris = new List<string>() { "http://localhost:8888", "http://localhost:4200/index.html" },
+                PostLogoutRedirectUris = new List<string>() { "http://localhost:8888", "http://localhost:4200/index.html" }
             };
 
             var userClient = new Client()
@@ -136,7 +136,7 @@ namespace RestSampleNew
                 AllowAccessToAllScopes = true,
                 ClientName = "Pizza Web Client",
                 Flow = Flows.ResourceOwner,
-                RedirectUris = new List<string>() { "https://localhost:5555", "http://localhost:4200/index.html" }
+                RedirectUris = new List<string>() { "http://localhost:8888", "http://localhost:4200/index.html" }
             };
 
             var user = new InMemoryUser()
@@ -169,16 +169,16 @@ namespace RestSampleNew
                 SiteName = "PizzaShop",
                 Factory = factory,
                 SigningCertificate = LoadCertificate(),
-            }).UseIdentityServerBearerTokenAuthentication(new IdentityServer3.AccessTokenValidation.IdentityServerBearerTokenAuthenticationOptions
+            }).UseIdentityServerBearerTokenAuthentication(new IdentityServerBearerTokenAuthenticationOptions
             {
-                Authority = "http://localhost:50698",
+                Authority = "http://localhost:8888",
                 ClientId = "PizzaWebClient",
                 ClientSecret = "secret",
                 RequireHttps = false,
                 ValidationMode = ValidationMode.Local,
-                IssuerName = "http://localhost:50698",
+                IssuerName = "http://localhost:8888",
                 SigningCertificate = LoadCertificate(),
-                ValidAudiences = new[] { "http://localhost:50698/resources" }
+                ValidAudiences = new[] { "http://localhost:8888/resources" }
             });
 
 

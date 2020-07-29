@@ -1,6 +1,8 @@
 ﻿using FluentValidation.WebApi;
 using RestSample.Logic.Models;
 using RestSample.Logic.Services;
+using Swashbuckle.Swagger.Annotations;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -24,6 +26,8 @@ namespace RestSampleNew.Controllers
         //Get by filter
         [HttpGet]
         [Route("")]
+        [SwaggerResponse(HttpStatusCode.OK, Type = typeof(IEnumerable<PizzaDto>))]
+        [SwaggerResponse(HttpStatusCode.InternalServerError)]
         public async Task<IHttpActionResult> GetAllAsync()
         {
             var result = await _pizzaService.GetAllAsync();
@@ -45,7 +49,7 @@ namespace RestSampleNew.Controllers
 
         [HttpGet]
         [Route("all/filter", Name = "GetByFilter")]
-        public IHttpActionResult GetByFilter([ModelBinder(typeof(FilterBinder))]Filter filter) //1.. int.Max
+        public IHttpActionResult GetByFilter([ModelBinder(typeof(FilterBinder))] Filter filter) //1.. int.Max
         {
             if (!ModelState.IsValid)
             {
@@ -89,7 +93,7 @@ namespace RestSampleNew.Controllers
         //INSERT
         [HttpPost]
         [Route("")]
-        public IHttpActionResult Add([CustomizeValidator(RuleSet = "PreValidation")]PizzaDto model)
+        public IHttpActionResult Add([CustomizeValidator(RuleSet = "PreValidation")] PizzaDto model)
         {
             if (!ModelState.IsValid)
             {
@@ -106,7 +110,7 @@ namespace RestSampleNew.Controllers
         //UPDATE
         [HttpPut]
         [Route("{id:int:min(1)}")]
-        public IHttpActionResult Update(int id, [FromBody]PizzaDto model)
+        public IHttpActionResult Update(int id, [FromBody] PizzaDto model)
         {
             _pizzaService.Update(model);
             return StatusCode(HttpStatusCode.NoContent);
