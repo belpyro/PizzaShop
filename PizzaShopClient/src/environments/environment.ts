@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  backendUrl: 'http://demovm:50698'
+  backendUrl: 'http://localhost:8888',
+  issuerUrl: 'http://localhost:8888',
 };
 
 /*

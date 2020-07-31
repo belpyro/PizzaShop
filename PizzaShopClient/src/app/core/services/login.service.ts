@@ -1,33 +1,51 @@
-import { UserDto } from '../model/userDto';
+import { environment } from './../../../environments/environment';
 import { Injectable } from '@angular/core';
-import { Subject, BehaviorSubject } from 'rxjs';
+import { Subject, BehaviorSubject, Observable, from } from 'rxjs';
 import { Router } from '@angular/router';
-import { OAuthService, AuthConfig } from 'angular-oauth2-oidc';
+import {
+  OAuthService,
+  AuthConfig,
+  OAuthEvent,
+  OAuthInfoEvent,
+  OAuthSuccessEvent,
+} from 'angular-oauth2-oidc';
+import { UserDto } from '../model/userDto';
+import { filter, switchMap, map } from 'rxjs/operators';
 
 export const oauthConfig: AuthConfig = {
-  issuer: 'http://localhost:8888',
+  issuer: environment.issuerUrl,
   redirectUri: window.location.origin + '/index.html',
-  clientId: 'PizzaWebClient',
-  responseType: 'code',
+  clientId: 'PizzaUserClient',
+  dummyClientSecret: 'secret',
+  // responseType: 'code',
   scope: 'openid profile email api',
   requireHttps: false,
   skipIssuerCheck: true,
   showDebugInformation: true,
   disablePKCE: true,
+  oidc: false,
   postLogoutRedirectUri: window.location.origin + '/login',
 };
 
 @Injectable()
 export class LoginService {
-  private loggedOnSubject = new BehaviorSubject<boolean>(true);
+  private loggedOnSubject: BehaviorSubject<UserDto> = new BehaviorSubject<
+    UserDto
+  >(null);
   private user: UserDto;
 
   constructor(private router: Router, private oauth: OAuthService) {
     this.oauth.configure(oauthConfig);
     this.oauth.loadDiscoveryDocumentAndTryLogin();
+    this.oauth.events
+      .pipe(
+        filter((value) => value.type === 'token_received'),
+        map((_) => Object.assign({} as UserDto, this.oauth.getIdentityClaims()))
+      )
+      .subscribe((u) => this.loggedOnSubject.next(u));
   }
 
-  get LoggedOn$() {
+  get LoggedOn$(): Observable<UserDto> {
     return this.loggedOnSubject.asObservable();
   }
 
@@ -40,18 +58,19 @@ export class LoginService {
       this.oauth.initLoginFlow();
     }
 
+    //Promise -> Observable
     this.oauth
       .fetchTokenUsingPasswordFlowAndLoadUserProfile(userName, password)
       .then((userInfo) => {
-        this.user = { uid: userInfo.sub, fullName: 'Ivan Ivanov' };
-        this.loggedOnSubject.next(true);
+        this.user = Object.assign(<UserDto>{}, userInfo);
+        this.loggedOnSubject.next(this.user);
       })
       .catch((reason) => console.error(reason));
   }
 
   logout() {
     this.user = null;
-    this.loggedOnSubject.next(false);
+    this.loggedOnSubject.next(null);
     this.oauth.logOut(true);
     this.router.navigate(['home']);
   }
