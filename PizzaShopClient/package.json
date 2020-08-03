@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "start home": "ng serve -c home",
+    "start_home": "ng serve -c home",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",

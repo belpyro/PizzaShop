@@ -40,8 +40,8 @@ export const routes: Routes = [
     PizzaModule,
     UserModule,
     CoreModule.forRoot(),
-    RouterModule.forRoot(routes, { enableTracing: true })
+    RouterModule.forRoot(routes, { enableTracing: false }),
   ],
   exports: [CoreModule, SharedModule, RouterModule],
 })
-export class PizzaRoutingModule { }
+export class PizzaRoutingModule {}

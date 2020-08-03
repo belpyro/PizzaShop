@@ -1,8 +1,10 @@
 <div class="card" style="width: 18rem;">
   <img src="..." class="card-img-top" alt="..." />
   <div class="card-body">
-    <h5 class="card-title">Pizza </h5>
-    <p class="card-text">Pizza price is</p>
-    <a class="link">Go somewhere</a>
+    <h5 class="card-title">{{ title }}</h5>
+    <p class="card-text">{{ description }}</p>
+    <button class="btn btn-primary" (click)="this.onClick()">
+      {{ btn_descr }}
+    </button>
   </div>
 </div>

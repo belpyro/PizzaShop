@@ -10,7 +10,7 @@ import { PizzaClient, API_BASE_URL } from './services/pizza.service';
 
 @NgModule({
   declarations: [PizzaListComponent, PizzaInfoComponent],
-  imports: [CommonModule, HttpClientModule, RouterModule, SharedModule],
+  imports: [CommonModule, HttpClientModule, SharedModule],
   providers: [
     PizzaClient,
     { provide: API_BASE_URL, useValue: environment.backendUrl },

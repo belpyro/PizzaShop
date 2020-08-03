@@ -14,6 +14,12 @@ import { OAuthModule } from 'angular-oauth2-oidc';
 import { HomeComponent } from './components/home/home.component';
 import { LoginService } from './services/login.service';
 import { NotificationService } from './services/notification.service';
+import {
+  CODE_FLOW_CONFIG,
+  oauthCodeConfig,
+  PASSWORD_FLOW_CONFIG,
+  oauthPasswordConfig,
+} from './configs/auth.config';
 
 @NgModule({
   declarations: [
@@ -32,7 +38,12 @@ import { NotificationService } from './services/notification.service';
       },
     }),
   ],
-  providers: [LoginService, NotificationService],
+  providers: [
+    LoginService,
+    NotificationService,
+    { provide: CODE_FLOW_CONFIG, useValue: oauthCodeConfig },
+    { provide: PASSWORD_FLOW_CONFIG, useValue: oauthPasswordConfig },
+  ],
   exports: [
     LoginComponent,
     NavbarComponent,
