@@ -32,6 +32,7 @@ using Ninject.Web.WebApi.OwinHost;
 using NSwag.AspNet.Owin;
 using Owin;
 using PizzaShop.Web.Middleware;
+using PizzaShop.Web.Security;
 using RestSample.Logic;
 using RestSampleNew.Controllers;
 using RestSampleNew.Helpers;
@@ -97,7 +98,7 @@ namespace RestSampleNew
             var provide = new CorsPolicyProvider();
             provide.PolicyResolver = ctx => Task.FromResult(new System.Web.Cors.CorsPolicy { AllowAnyHeader = true, AllowAnyMethod = true, AllowAnyOrigin = true });
 
-            app.UseCors(new Microsoft.Owin.Cors.CorsOptions { PolicyProvider = provide });
+            app.UseCors(new CorsOptions { PolicyProvider = provide });
             app.UseStaticFiles();
             app.UseSwagger(typeof(Startup).Assembly).UseSwaggerUi3(settings => settings.ServerUrl = "http://demovm:50698");
 
@@ -115,43 +116,12 @@ namespace RestSampleNew
                 AuthenticationType = "MyGoogle"
             });
 
-            app.Map("/login/google", b => b.Use<GoogleAuthMiddleware>());
-
             IdentityServerServiceFactory factory = new IdentityServerServiceFactory();
-            var client = new Client()
-            {
-                ClientId = "PizzaWebClient",
-                ClientSecrets = new List<Secret>() { new Secret("secret".Sha256()) },
-                AllowAccessToAllScopes = true,
-                ClientName = "Pizza Web Client",
-                Flow = Flows.AuthorizationCode,
-                RedirectUris = new List<string>() { "http://localhost:8888", "http://localhost:4200/index.html" },
-                PostLogoutRedirectUris = new List<string>() { "http://localhost:8888", "http://localhost:4200/index.html" }
-            };
-
-            var userClient = new Client()
-            {
-                ClientId = "PizzaUserClient",
-                ClientSecrets = new List<Secret>() { new Secret("secret".Sha256()) },
-                AllowAccessToAllScopes = true,
-                ClientName = "Pizza Web Client",
-                Flow = Flows.ResourceOwner,
-                RedirectUris = new List<string>() { "http://localhost:8888", "http://localhost:4200/index.html" }
-            };
-
-            var user = new InMemoryUser()
-            {
-                Username = "user",
-                Password = "123",
-                Subject = "123-123-123",
-                Claims = new[] { new Claim("api-verison", "1") }
-            };
 
             factory.UseInMemoryScopes(StandardScopes.All.Append(
                 new Scope() { Name = "api", DisplayName = "Api", Description = "Access to API", Type = ScopeType.Resource, Claims = new List<ScopeClaim> { new ScopeClaim("api-version", true) } }))
-                .UseInMemoryClients(new[] { client, userClient });
+                .UseInMemoryClients(new[] { Clients.WebClient, Clients.PasswordClient });
             factory.UserService = new Registration<IdentityServer3.Core.Services.IUserService>(new AspNetIdentityUserService<IdentityUser, string>(kernel.Get<UserManager<IdentityUser>>()));
-            // .UseInMemoryUsers(new List<InMemoryUser>() { user });
 
             app.UseIdentityServer(new IdentityServerOptions
             {
@@ -171,14 +141,14 @@ namespace RestSampleNew
                 SigningCertificate = LoadCertificate(),
             }).UseIdentityServerBearerTokenAuthentication(new IdentityServerBearerTokenAuthenticationOptions
             {
-                Authority = "http://localhost:8888",
+                Authority = "http://demovm:50698",
                 ClientId = "PizzaWebClient",
                 ClientSecret = "secret",
                 RequireHttps = false,
                 ValidationMode = ValidationMode.Local,
-                IssuerName = "http://localhost:8888",
+                IssuerName = "http://demovm:50698",
                 SigningCertificate = LoadCertificate(),
-                ValidAudiences = new[] { "http://localhost:8888/resources" }
+                ValidAudiences = new[] { "http://demovm:50698/resources" }
             });
 
 
