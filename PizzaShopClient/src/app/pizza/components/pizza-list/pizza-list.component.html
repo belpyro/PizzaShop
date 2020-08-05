@@ -1,7 +1,13 @@
 <div>
   <app-card
     [title]="pizza.Name"
-    [description]="'Current price: ' + pizza.Price"
+    [description]="
+      'Current price: ' +
+      pizza.Price +
+      '§ ' +
+      (pizza.Price | currency: 1.87 | currency: 0.1) +
+      'BYN'
+    "
     [label]="'Go to page'"
     *ngFor="let pizza of pizzas"
     (onClicked)="this.goToPizzaPage(pizza.Id)"

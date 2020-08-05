@@ -1,3 +1,4 @@
+import { RouterModule } from '@angular/router';
 import { environment } from './../../environments/environment';
 import {
   NgModule,
@@ -24,13 +25,14 @@ import {
 @NgModule({
   declarations: [
     LoginComponent,
-    NavbarComponent,
     NotFoundComponent,
     HomeComponent,
+    NavbarComponent,
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    RouterModule,
     OAuthModule.forRoot({
       resourceServer: {
         sendAccessToken: true,
@@ -39,14 +41,13 @@ import {
     }),
   ],
   providers: [
-    LoginService,
     NotificationService,
     { provide: CODE_FLOW_CONFIG, useValue: oauthCodeConfig },
     { provide: PASSWORD_FLOW_CONFIG, useValue: oauthPasswordConfig },
   ],
   exports: [
-    LoginComponent,
     NavbarComponent,
+    LoginComponent,
     NotFoundComponent,
     HomeComponent,
     OAuthModule,
@@ -62,7 +63,7 @@ export class CoreModule {
   static forRoot(): ModuleWithProviders<CoreModule> {
     return {
       ngModule: CoreModule,
-      providers: [LoginService, NotificationService],
+      providers: [NotificationService],
     };
   }
 }

@@ -12,6 +12,7 @@ import { CoreModule } from './core/core.module';
 import { UserModule } from './user/user.module';
 import { PizzaModule } from './pizza/pizza.module';
 import { SharedModule } from './shared/shared.module';
+import { LogoutResolver } from './core/resolvers/logout.resolver';
 
 /*
     /home
@@ -26,6 +27,11 @@ export const routes: Routes = [
   { path: 'pizzas', component: PizzaListComponent, canActivate: [AuthGuard] },
   { path: 'pizzas/:id', component: PizzaInfoComponent },
   { path: 'login', component: LoginComponent },
+  {
+    path: 'logout',
+    resolve: { data: LogoutResolver },
+    component: HomeComponent,
+  },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', component: NotFoundComponent },
@@ -35,12 +41,11 @@ export const routes: Routes = [
   declarations: [],
   imports: [
     CommonModule,
-    CoreModule,
     SharedModule,
     PizzaModule,
     UserModule,
-    CoreModule.forRoot(),
     RouterModule.forRoot(routes, { enableTracing: false }),
+    CoreModule.forRoot(),
   ],
   exports: [CoreModule, SharedModule, RouterModule],
 })

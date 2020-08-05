@@ -14,7 +14,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   message: string;
   email: string;
   user$: Observable<UserDto>;
-  isLogged = false;
+  isLogged$: Observable<boolean>;
   // private subscription: Subscription;
 
   constructor(private loginService: LoginService) {}
@@ -25,6 +25,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.user$ = this.loginService.LoggedOn$;
+    this.isLogged$ = this.loginService.isLoggedOn$;
     // this.subscription = this.loginService.LoggedOn$.subscribe();
   }
 

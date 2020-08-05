@@ -4,30 +4,25 @@ import { InjectionToken } from '@angular/core';
 
 export const oauthPasswordConfig: AuthConfig = {
   issuer: environment.issuerUrl,
-  redirectUri: window.location.origin + '/index.html',
+  redirectUri: window.location.origin,
   clientId: 'PizzaUserClient',
   dummyClientSecret: 'secret',
   scope: 'openid profile email api',
   requireHttps: false,
-  skipIssuerCheck: true,
-  showDebugInformation: true,
-  disablePKCE: true,
+  showDebugInformation: !environment.production,
   oidc: false,
-  postLogoutRedirectUri: window.location.origin + '/login',
 };
 
 export const oauthCodeConfig: AuthConfig = {
   issuer: environment.issuerUrl,
-  redirectUri: window.location.origin + '/index.html',
+  redirectUri: window.location.origin,
   clientId: 'PizzaWebClient',
   dummyClientSecret: 'secret',
   responseType: 'code',
   scope: 'openid profile email api',
   requireHttps: false,
-  skipIssuerCheck: true,
-  showDebugInformation: true,
+  showDebugInformation: !environment.production,
   disablePKCE: true,
-  postLogoutRedirectUri: window.location.origin + '/login',
 };
 
 export const PASSWORD_FLOW_CONFIG = new InjectionToken<AuthConfig>(
