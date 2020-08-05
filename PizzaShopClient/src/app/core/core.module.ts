@@ -63,7 +63,7 @@ export class CoreModule {
   static forRoot(): ModuleWithProviders<CoreModule> {
     return {
       ngModule: CoreModule,
-      providers: [NotificationService],
+      providers: [NotificationService, LoginService],
     };
   }
 }
