@@ -11,6 +11,7 @@ using System.Web.Http.ModelBinding;
 namespace RestSampleNew.Controllers
 {
     [RoutePrefix("api/pizzas")]
+    [Authorize]
     public class PizzaController : ApiController
     {
         private readonly IPizzaService _pizzaService;
