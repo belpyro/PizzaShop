@@ -1,3 +1,4 @@
+import { SampleModel } from './../../../shared/models/sample.model';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -6,9 +7,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
+  model: SampleModel = { title: 'Default' };
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  onClick() {
+    this.model = { title: 'Changed' };
   }
 }

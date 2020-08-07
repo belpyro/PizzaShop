@@ -1,3 +1,5 @@
+import { HttpClientModule } from '@angular/common/http';
+import { SharedModule } from './../shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { environment } from './../../environments/environment';
 import {
@@ -32,7 +34,9 @@ import {
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    HttpClientModule,
     RouterModule,
+    SharedModule,
     OAuthModule.forRoot({
       resourceServer: {
         sendAccessToken: true,

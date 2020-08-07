@@ -11,19 +11,9 @@ import { PizzaClient, PizzaDto } from '../../services/pizza.service';
 export class PizzaInfoComponent implements OnInit {
   pizza: PizzaDto;
 
-  constructor(
-    private route: ActivatedRoute,
-    private pizzaClient: PizzaClient
-  ) {
-    // this.route.paramMap
-    //   .pipe(
-    //     switchMap((params) => {
-    //       const id = +params.get('id');
-    //       return this.pizzaClient.getPizzaById(id);
-    //     })
-    //   )
-    //   .subscribe((data) => (this.pizza = data));
+  constructor(private route: ActivatedRoute, private pizzaClient: PizzaClient) {
+    this.route.data.subscribe((data) => (this.pizza = data.pizza));
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

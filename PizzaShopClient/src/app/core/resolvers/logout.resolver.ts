@@ -1,7 +1,7 @@
 import { LoginService } from 'src/app/core/services/login.service';
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
-import { Observable, EMPTY } from 'rxjs';
+import { Observable, EMPTY, NEVER } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class LogoutResolver implements Resolve<any> {

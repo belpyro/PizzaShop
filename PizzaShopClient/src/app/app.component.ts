@@ -1,4 +1,6 @@
+import { LoginService } from 'src/app/core/services/login.service';
 import { Component, OnInit } from '@angular/core';
+import { NotificationsService } from 'angular2-notifications';
 
 @Component({
   selector: 'app-root',
@@ -6,11 +8,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  title = 'PizzaShopClient';
+  title = 'PizzaShop';
   /**
    *
    */
-  constructor() { }
+  constructor(private auth: LoginService, private ntf: NotificationsService) {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.auth.LoggedOn$.subscribe((u) =>
+      this.ntf.success('Success', `Hello ${u === null ? 'Anonymous' : u.email}`)
+    );
+  }
 }
