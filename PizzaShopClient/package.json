@@ -23,7 +23,10 @@
     "angular-oauth2-oidc": "^10.0.3",
     "angular2-notifications": "^9.0.0",
     "bootstrap": "^4.5.0",
+    "jquery": "^3.5.1",
+    "ng2-signalr": "^10.0.2",
     "rxjs": "~6.5.4",
+    "signalr": "^2.4.1",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
   },
