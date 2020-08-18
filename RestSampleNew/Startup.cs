@@ -21,6 +21,7 @@ using IdentityServer3.Core.Models;
 using IdentityServer3.Core.Services.InMemory;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.SignalR;
 using Microsoft.Owin;
 using Microsoft.Owin.Cors;
 using Microsoft.Owin.Extensions;
@@ -92,13 +93,12 @@ namespace RestSampleNew
                 opt.ValidatorFactory = new CustomValidatorFactory(kernel);
             });
 
-            //app.CreatePerOwinContext<PizzaShopDbContext>(() => { });
-            //app.CreatePerOwinContext<UserManager<IdentityUser>(() => new UserManager<IdentityUser>(new UserStore<IdentityUser>(new System.Data.Entity.DbContext())));
-
             var provide = new CorsPolicyProvider();
             provide.PolicyResolver = ctx => Task.FromResult(new System.Web.Cors.CorsPolicy { AllowAnyHeader = true, AllowAnyMethod = true, AllowAnyOrigin = true });
 
             app.UseCors(new CorsOptions { PolicyProvider = provide });
+            app.MapSignalR(new HubConfiguration { EnableDetailedErrors = true });
+
             app.UseStaticFiles();
             app.UseSwagger(typeof(Startup).Assembly).UseSwaggerUi3(settings => settings.ServerUrl = "http://demovm:50698");
 
@@ -116,6 +116,21 @@ namespace RestSampleNew
                 AuthenticationType = "MyGoogle"
             });
 
+            AddPizzaSecurity(app, kernel);
+
+
+
+            app.UseNinjectMiddleware(() => kernel).UseNinjectWebApi(config);
+        }
+
+        private static X509Certificate2 LoadCertificate()
+        {
+            return new X509Certificate2(
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"bin\Config\idsrv3test.pfx"), "idsrv3test");
+        }
+
+        private static IAppBuilder AddPizzaSecurity(IAppBuilder app, IKernel kernel)
+        {
             IdentityServerServiceFactory factory = new IdentityServerServiceFactory();
 
             factory.UseInMemoryScopes(StandardScopes.All.Append(
@@ -151,15 +166,7 @@ namespace RestSampleNew
                 ValidAudiences = new[] { "http://demovm:50698/resources" }
             });
 
-
-
-            app.UseNinjectMiddleware(() => kernel).UseNinjectWebApi(config);
-        }
-
-        private static X509Certificate2 LoadCertificate()
-        {
-            return new X509Certificate2(
-            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"bin\Config\idsrv3test.pfx"), "idsrv3test");
+            return app;
         }
     }
 }

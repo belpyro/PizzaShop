@@ -1,4 +1,5 @@
 ﻿using FluentValidation.WebApi;
+using Microsoft.AspNet.SignalR;
 using RestSample.Logic.Models;
 using RestSample.Logic.Services;
 using Swashbuckle.Swagger.Annotations;
@@ -11,7 +12,7 @@ using System.Web.Http.ModelBinding;
 namespace RestSampleNew.Controllers
 {
     [RoutePrefix("api/pizzas")]
-    [Authorize]
+    [System.Web.Http.Authorize]
     public class PizzaController : ApiController
     {
         private readonly IPizzaService _pizzaService;
@@ -103,6 +104,9 @@ namespace RestSampleNew.Controllers
 
             var result = _pizzaService.Add(model);
             var url = Url.Link("GetPizzaById", new { id = result.Value.Id });
+
+            var ctx = GlobalHost.ConnectionManager.GetHubContext<PizzaShop.Web.Hubs.PizzaHub>();
+            ctx.Clients.All.PizzaAdded(model);
 
             return result.IsSuccess ? Created(url, result.Value) : (IHttpActionResult)BadRequest(result.Error);
 
